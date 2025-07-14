@@ -105,7 +105,7 @@ const Chat = () => {
 
     try {
       const res = await axios.post(
-        '${import.meta.env.VITE_BACKEND_URL}/api/messages',
+        `${import.meta.env.VITE_BACKEND_URL}/api/messages`,
         messageData,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import {
   getCustomerOrders,
   createStripeSession,
-  downloadReceipt, // ✅ added
+  downloadReceipt,
 } from '../../services/orderService';
 
 const CustomerOrders = () => {
@@ -14,8 +14,8 @@ const CustomerOrders = () => {
   const [messageType, setMessageType] = useState('');
   const token = localStorage.getItem('token');
   const location = useLocation();
+  const limit = 5;
 
-  // ✅ Show payment success/failure message
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const paymentStatus = params.get('payment');
@@ -42,13 +42,12 @@ const CustomerOrders = () => {
     return () => clearTimeout(timer);
   }, [location]);
 
-  // ✅ Fetch paginated customer orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await getCustomerOrders(token, page);
+        const res = await getCustomerOrders(token, page, limit);
         setOrders(res.orders || []);
-        setTotalPages(res.totalPages || 1);
+        setTotalPages(res.pagination?.totalPages || 1);
       } catch (err) {
         console.error('❌ Error fetching orders:', err);
       }
@@ -79,7 +78,6 @@ const CustomerOrders = () => {
     <div className="p-6 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Your Orders</h2>
 
-      {/* ✅ Toast message */}
       {message && (
         <div
           className={`mb-4 p-3 rounded-md shadow ${
@@ -90,7 +88,6 @@ const CustomerOrders = () => {
         </div>
       )}
 
-      {/* ✅ Order Cards */}
       {orders.length === 0 ? (
         <p className="text-gray-500">No orders found.</p>
       ) : (
@@ -101,9 +98,9 @@ const CustomerOrders = () => {
               <p className="text-sm text-gray-600">Cook: {order.cook_name}</p>
               <p className="text-sm">Quantity: {order.quantity}</p>
               <p className="text-sm">Total Price: ₹{order.total_price}</p>
-              <p className="text-sm">
+              <p className="text-sm capitalize">
                 Status:{' '}
-                <span className="font-semibold capitalize">
+                <span className="font-semibold">
                   {order.status === 'paid'
                     ? '✅ Paid'
                     : order.status === 'pending_payment'
@@ -112,7 +109,6 @@ const CustomerOrders = () => {
                 </span>
               </p>
 
-              {/* 🟢 Show "Pay Now" button if not paid */}
               {order.status === 'pending_payment' && (
                 <button
                   onClick={() => handlePayNow(order.id)}
@@ -122,7 +118,6 @@ const CustomerOrders = () => {
                 </button>
               )}
 
-              {/* 🟢 Show "Download Receipt" button only for paid orders */}
               {order.status === 'paid' && (
                 <button
                   onClick={() => handleDownloadReceipt(order.id)}
@@ -136,7 +131,6 @@ const CustomerOrders = () => {
         </div>
       )}
 
-      {/* ✅ Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-4 mt-6">
           <button

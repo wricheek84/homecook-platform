@@ -11,7 +11,7 @@ const CustomerDashboard = () => {
   const [wishlist, setWishlist] = useState([]);
   const [stats, setStats] = useState({ total: 0, amount: 0, active: 0 });
   const [page, setPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [addressModalOpen, setAddressModalOpen] = useState(false);
   const [address, setAddress] = useState({
     full_name: '',
@@ -26,8 +26,6 @@ const CustomerDashboard = () => {
   const [feedbackMsg, setFeedbackMsg] = useState(null);
   const limit = 5;
 
-  const totalPages = Math.ceil(totalCount / limit);
-
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const token = localStorage.getItem('token');
 
@@ -36,16 +34,17 @@ const CustomerDashboard = () => {
       try {
         const response = await getCustomerOrders(token, page, limit);
         const fetchedOrders = response?.orders || [];
-        const fetchedCount = response?.totalCount || 0;
+        const pagination = response?.pagination || {};
 
         setOrders(fetchedOrders);
-        setTotalCount(fetchedCount);
-
-        const amount = fetchedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
-        const active = fetchedOrders.filter(
-          (o) => o.status !== 'delivered' && o.status !== 'cancelled'
-        ).length;
-        setStats({ total: fetchedCount, amount, active });
+        setStats({
+          total: pagination.total || fetchedOrders.length,
+          amount: fetchedOrders.reduce((sum, o) => sum + Number(o.total_price), 0),
+          active: fetchedOrders.filter(
+            (o) => o.status !== 'delivered' && o.status !== 'cancelled'
+          ).length,
+        });
+        setTotalPages(pagination.totalPages || 1);
 
         const wishlistData = await getWishlist(user.id);
         setWishlist(wishlistData);
@@ -233,7 +232,7 @@ const CustomerDashboard = () => {
               ))}
             </div>
 
-            {/* ✅ Updated Pagination */}
+            {/* ✅ Fixed Pagination */}
             <div className="flex justify-center gap-4 mb-8">
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"
@@ -243,7 +242,7 @@ const CustomerDashboard = () => {
                 ⬅ Prev
               </button>
               <span className="text-sm text-gray-600 mt-2">
-                Page {page} of {totalPages || 1}
+                Page {page} of {totalPages}
               </span>
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"

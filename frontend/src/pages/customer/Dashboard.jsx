@@ -39,12 +39,11 @@ const CustomerDashboard = () => {
         setOrders(fetchedOrders);
         setTotalCount(fetchedCount);
 
-        const total = fetchedCount;
         const amount = fetchedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
         const active = fetchedOrders.filter(
-          (o) => o.status !== 'delivered' && o.status !== 'cancelled'
+        (o) => o.status !== 'delivered' && o.status !== 'cancelled'
         ).length;
-        setStats({ total, amount, active });
+        setStats({ total: fetchedCount, amount, active });
 
         const wishlistData = await getWishlist(user.id);
         setWishlist(wishlistData);

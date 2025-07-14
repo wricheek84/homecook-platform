@@ -54,8 +54,8 @@ const createCheckoutSession = (req, res) => {
             quantity: 1,
           },
         ],
-        success_url: 'http://localhost:5173/customer/orders?payment=success',
-        cancel_url: 'http://localhost:5173/customer/orders?payment=cancel',
+        success_url: 'https://homecook-kappa.vercel.app/customer/orders?payment=success',
+        cancel_url: 'https://homecook-kappa.vercel.app/customer/orders?payment=cancel',
         metadata: {
           orderId: String(orderId),
         },

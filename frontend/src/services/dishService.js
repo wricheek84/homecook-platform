@@ -13,8 +13,12 @@ const getAuthConfig = () => {
   };
 };
 
-// 🍽️ Get dishes filtered by customer's city (based on delivery address city)
 export const getDishesByLocation = async (city) => {
-  const res = await axios.get(`${API}?city=${encodeURIComponent(city)}`, getAuthConfig());
-  return res.data;
+  try {
+    const res = await axios.get(`https://homecook-backend-7i7u.onrender.com/api/dishes?city=${city}`);
+    return Array.isArray(res.data) ? res.data : []; // ✅ always return array
+  } catch (err) {
+    console.error('❌ Error fetching dishes by location:', err);
+    return [];
+  }
 };

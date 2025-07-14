@@ -11,14 +11,13 @@ const getAuthConfig = () => {
   };
 };
 
-// 🔍 Get current customer address
 export const getCustomerAddress = async () => {
-  const res = await axios.get(`${API}`, getAuthConfig());
+  const res = await axios.get(`${API}/customer/address`, getAuthConfig());
   return res.data;
 };
 
-// 💾 Save or update customer address
+
 export const saveCustomerAddress = async (address) => {
-  const res = await axios.post(`${API}`, address, getAuthConfig());
+  const res = await axios.post(`${API}/customer/address`, address, getAuthConfig());
   return res.data;
 };

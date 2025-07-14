@@ -26,10 +26,10 @@ const CustomerDashboard = () => {
   const [feedbackMsg, setFeedbackMsg] = useState(null);
   const limit = 5;
 
+  const totalPages = Math.ceil(totalCount / limit);
+
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const token = localStorage.getItem('token');
-
-  const totalPages = Math.ceil(totalCount / limit);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -233,6 +233,7 @@ const CustomerDashboard = () => {
               ))}
             </div>
 
+            {/* ✅ Updated Pagination */}
             <div className="flex justify-center gap-4 mb-8">
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"
@@ -241,7 +242,9 @@ const CustomerDashboard = () => {
               >
                 ⬅ Prev
               </button>
-              <span className="text-sm text-gray-600 mt-2">Page {page} of {totalPages}</span>
+              <span className="text-sm text-gray-600 mt-2">
+                Page {page} of {totalPages || 1}
+              </span>
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"
                 disabled={page >= totalPages}

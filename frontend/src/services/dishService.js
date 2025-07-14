@@ -14,9 +14,19 @@ const getAuthConfig = () => {
 };
 
 export const getDishesByLocation = async (city) => {
+  const token = localStorage.getItem('token');
+
   try {
-    const res = await axios.get(`https://homecook-backend-7i7u.onrender.com/api/dishes?city=${city}`);
-    return Array.isArray(res.data) ? res.data : []; // ✅ always return array
+    const res = await axios.get(
+      `https://homecook-backend-7i7u.onrender.com/api/dishes?city=${city}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return Array.isArray(res.data) ? res.data : [];
   } catch (err) {
     console.error('❌ Error fetching dishes by location:', err);
     return [];

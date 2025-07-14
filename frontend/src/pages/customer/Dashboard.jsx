@@ -4,7 +4,7 @@ import { getWishlist, removeFromWishlist } from '../../services/wishlistService'
 import { getCustomerAddress, saveCustomerAddress } from '../../services/customerService';
 import { AiFillHeart } from 'react-icons/ai';
 import Lottie from 'lottie-react';
-import cookingAnimation from '../../assets/Cooking.json'; // ✅ Ensure correct path
+import cookingAnimation from '../../assets/Cooking.json';
 
 const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -32,13 +32,18 @@ const CustomerDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { orders, totalCount } = await getCustomerOrders(token, page, limit);
-        setOrders(orders);
-        setTotalCount(totalCount);
+        const response = await getCustomerOrders(token, page, limit);
+        const fetchedOrders = response?.orders || [];
+        const fetchedCount = response?.totalCount || 0;
 
-        const total = totalCount;
-        const amount = orders.reduce((sum, o) => sum + Number(o.total_price), 0);
-        const active = orders.filter((o) => o.status !== 'delivered' && o.status !== 'cancelled').length;
+        setOrders(fetchedOrders);
+        setTotalCount(fetchedCount);
+
+        const total = fetchedCount;
+        const amount = fetchedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
+        const active = fetchedOrders.filter(
+          (o) => o.status !== 'delivered' && o.status !== 'cancelled'
+        ).length;
         setStats({ total, amount, active });
 
         const wishlistData = await getWishlist(user.id);
@@ -103,7 +108,6 @@ const CustomerDashboard = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* 🔥 Background Animation */}
       <Lottie
         animationData={cookingAnimation}
         loop
@@ -111,7 +115,6 @@ const CustomerDashboard = () => {
         className="fixed top-0 left-0 w-full h-full object-cover z-0 opacity-60"
       />
 
-      {/* Content Overlay */}
       <div className="relative z-10 p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-1">
           👋 Welcome back, {user.name}
@@ -127,7 +130,6 @@ const CustomerDashboard = () => {
           </button>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {[
             ['Orders Placed', stats.total, '🧾', 'from-pink-500 to-pink-300'],
@@ -146,7 +148,6 @@ const CustomerDashboard = () => {
           ))}
         </div>
 
-        {/* Wishlist */}
         <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
           <AiFillHeart className="mr-2 text-red-500" />
           Your Wishlist
@@ -185,14 +186,12 @@ const CustomerDashboard = () => {
           </div>
         )}
 
-        {/* Orders */}
         <h2 className="text-xl font-semibold text-gray-800 mb-4">🕒 Order History</h2>
         {orders.length === 0 ? (
           <div className="text-gray-500">No orders yet. Start exploring!</div>
         ) : (
           <>
             <div className="bg-rose-300 bg-opacity-90 rounded-2xl shadow-xl divide-y mb-8 backdrop-blur-md border border-rose-400">
-
               {orders.map((order) => (
                 <div key={order.id} className="flex justify-between items-center p-4">
                   <div>
@@ -233,7 +232,6 @@ const CustomerDashboard = () => {
               ))}
             </div>
 
-            {/* Pagination */}
             <div className="flex justify-center gap-4 mb-8">
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"
@@ -254,7 +252,6 @@ const CustomerDashboard = () => {
           </>
         )}
 
-        {/* Footer Actions */}
         <div className="text-center space-y-4">
           <button
             className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-2xl shadow transition"
@@ -279,7 +276,6 @@ const CustomerDashboard = () => {
         </div>
       </div>
 
-      {/* Address Modal */}
       {addressModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg">

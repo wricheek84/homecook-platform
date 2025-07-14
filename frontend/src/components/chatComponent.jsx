@@ -10,7 +10,7 @@ const ChatComponent = ({ userId, receiverId, token }) => {
 
   // Socket connection
   useEffect(() => {
-    const newSocket = io('http://localhost:5000');
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL);
     newSocket.emit('join', userId);
     setSocket(newSocket);
 
@@ -36,7 +36,7 @@ const ChatComponent = ({ userId, receiverId, token }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/messages/${receiverId}`, {
+         const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/messages/${receiverId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setChat(res.data);
@@ -62,7 +62,7 @@ const ChatComponent = ({ userId, receiverId, token }) => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/messages', msgData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/messages`, msgData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
-const socket = io('http://localhost:5000');
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -31,7 +31,7 @@ const Chat = () => {
 
     const fetchHomecooks = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/homecooks', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/homecooks`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setHomecooks(res.data);
@@ -79,7 +79,7 @@ const Chat = () => {
       if (!selectedCook) return;
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/messages/${selectedCook.id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/messages/${selectedCook.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setMessages(res.data);
@@ -105,7 +105,7 @@ const Chat = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/messages',
+        '${import.meta.env.VITE_BACKEND_URL}/api/messages',
         messageData,
         {
           headers: { Authorization: `Bearer ${token}` },

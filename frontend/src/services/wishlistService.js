@@ -1,7 +1,7 @@
 // src/services/wishlistService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/wishlist';
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/wishlist`;
 
 // ✅ Add dish to wishlist
 export const addToWishlist = async (customerId, dishId) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/users';
+const API_BASE = `${import.meta.env.VITE_BACKEND_URL}/api/users`;
 
 // 🔓 Login function
 export const loginUser = async (email, password) => {

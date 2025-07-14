@@ -29,6 +29,8 @@ const CustomerDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const token = localStorage.getItem('token');
 
+  const totalPages = Math.ceil(totalCount / limit);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +43,7 @@ const CustomerDashboard = () => {
 
         const amount = fetchedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
         const active = fetchedOrders.filter(
-        (o) => o.status !== 'delivered' && o.status !== 'cancelled'
+          (o) => o.status !== 'delivered' && o.status !== 'cancelled'
         ).length;
         setStats({ total: fetchedCount, amount, active });
 
@@ -239,10 +241,10 @@ const CustomerDashboard = () => {
               >
                 ⬅ Prev
               </button>
-              <span className="text-sm text-gray-600 mt-2">Page {page}</span>
+              <span className="text-sm text-gray-600 mt-2">Page {page} of {totalPages}</span>
               <button
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm"
-                disabled={page * limit >= totalCount}
+                disabled={page >= totalPages}
                 onClick={() => setPage((p) => p + 1)}
               >
                 Next ➡

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = '/api';
+const API = 'https://homecook-backend-7i7u.onrender.com/api';
 
 const getAuthConfig = (token) => ({
   headers: {

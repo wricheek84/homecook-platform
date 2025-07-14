@@ -4,7 +4,7 @@ import { getWishlist, removeFromWishlist } from '../../services/wishlistService'
 import { getCustomerAddress, saveCustomerAddress } from '../../services/customerService';
 import { AiFillHeart } from 'react-icons/ai';
 import Lottie from 'lottie-react';
-import cookingAnimation from '../../assets/cooking.json'; // ✅ Ensure correct path
+import cookingAnimation from '../../assets/Cooking.json'; // ✅ Ensure correct path
 
 const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);

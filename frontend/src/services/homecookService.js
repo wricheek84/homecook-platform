@@ -29,8 +29,8 @@ export const getHomecookOrders = async () => {
 export const getAllDishes = async () => {
   try {
     console.log('📡 Calling GET /api/dishes...');
-    const res = await axios.get(`${API}/dishes`, getAuthConfig()); // ✅ fixed
-    return res.data;
+    const res = await axios.get(`${API}/dishes`, getAuthConfig());
+    return Array.isArray(res.data) ? res.data : res.data.dishes || [];
   } catch (err) {
     console.error('❌ Error fetching dishes:', err);
     throw err;

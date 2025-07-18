@@ -28,10 +28,10 @@ A MERN-based food delivery app that connects **homecooks** with **local customer
 |--------------|------------------------------|
 | Frontend     | React + Tailwind CSS         |
 | Backend      | Node.js + Express            |
-| Database     | MySQL with Sequelize ORM     |
+| Database     | MySQL with raw sql    |
 | Auth         | JWT-based authentication     |
 | Payments     | Stripe Integration           |
-| Hosting      | Vercel (Frontend), Render (Backend), PlanetScale (DB) |
+| Hosting      | Vercel (Frontend), Render (Backend), Railway(DB) |
 
 ---
 
